@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Tracks</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+    <script src="../static/session.js"></script>
+</head>
+<body>
+    <header>
+        <img src="../static/CTLogo.jpg" alt="Coyote Tracks Logo">
+        <img id="hammenu" src="../static/hammenu.png" alt="Navigation Menu">
+        <nav id="navmenu">
+            <div id="closeMenu">
+            <img src="../static/close.png" alt="Close Navigation Menu">
+          </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/accessibility">Accessibility Info</a></li>
+                <li><a href="/timemanagement">Time Management</a></li>
+                <li><a href="/account">Account</a></li>
+                <li><a href="" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="heading">
+            <h1>Time Management</h1>
+        </section>
+        <section id="intro">
+            <h3>Calculator - Enter your desired trail length in minutes</h3>
+            <form id="myForm">
+            <label for="numberInput">Enter a number:</label>
+            <input type="number" id="numberInput" min="0" step="1" placeholder="60">
+            <input type="radio" id="minimum" name="minmax" value="Minimum">
+            <label for="minimum">Minimum</label>
+            <input type="radio" id="maximum" name="minmax" value="Maximum" checked="checked">
+            <label for="maximum">Maximum</label>
+            <button onclick="validateInput()">Submit</button>
+            </form>
+            <input type="checkbox" id="hideClosed" name="hideClosed" value="false">
+            <label for="hideClosed">Hide Closed Trails?</label><br>
+            <p id="feedback"></p>
+            <div id="hikes"></div>
+        </section>
+        <aside>
+            <div id="weather">
+                <h1>Weather</h1>
+                <div id="weather-report"></div>
+            </div>
+        </aside>
+        <div id="CCpopup" class="popup">
+            <div class="popup-content">
+              <span class="close-btn" onclick="closeCCPopup()">&times;</span>
+              <h1>Creative Commons</h1>
+              <h3>This Website Uses Creative Commons Principles</h3>
+              <h4>What is CC?</h4>
+              <p>&#x2022; Flexible Copyright Protection: CC licenses allow creators to specify the conditions under which others can use their work. This ranges from allowing any type of use as long as the creator is credited, to permitting only non-commercial uses, to allowing modifications as long as derivative works are shared under the same terms.
+            </p>
+            <p>&#x2022; Different Types of Licenses: Creative Commons offers several types of licenses, from the most permissive (CC BY) to the most restrictive (CC BY-NC-ND), allowing creators to choose the level of protection and freedom that fits their needs.
+            </p>
+            <p>&#x2022; Global Recognition: CC licenses are recognized worldwide, making them a powerful tool for sharing and using content across borders.
+            </p>
+            <a href="https://creativecommons.org/share-your-work/cclicenses/" target="_blank">Learn More Here</a></div>
+          </div> 
+    </main>
+    <footer>
+        <div id="footer"><div><span style="padding-right: 15px;">Coyote Trails</span><img id="ccIcon" style="max-width: 40px; vertical-align: middle; border-radius: 10em; background-color: white;" src="../static/cc.png"></div><div><a href="/about"><span>About</span></a></div></div>
+     </footer>
+    <script src="../static/script.js"></script>
+    <script src="../static/hammenu.js"></script>
+    <script>
+    const username = usernameCookie;
+    const durationPrefurl = `/prefduration?username=${encodeURIComponent(username)}`;
+
+        fetch(durationPrefurl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const preferredOption = data.PreferredDuration;
+                document.getElementById('numberInput').value = preferredOption;
+            })
+            .catch(error => console.error('Error:', error));
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        getWeatherReport("weather-report");
+        fetchHikesData();
+        });
+    </script>
+</body>
+</html>

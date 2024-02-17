@@ -1,0 +1,365 @@
+/* html{
+  width: 100vw;
+  margin: 0%; 
+} */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #DEB887; /* Adjust the color to match your wireframe */
+    color: #333;
+    width: 100%;
+    margin: auto;
+}
+
+
+header {
+    background: #F4A460;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header img {
+    max-width: 100px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+#intro {
+    background: #fff; /* Replace with the color or image of cactus */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+}
+#about {
+    background: #fff; /* Replace with the color or image of cactus */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    
+}
+#about p{
+  line-height: 2;
+}
+#heading {
+    background: #fff; /* Replace with the color or image of cactus */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    max-width: 100vw;
+    display: flex;
+    justify-content: space-between;
+
+}
+@media (max-width: 650px){
+  #heading{
+    flex-direction: column;
+  }
+}
+
+#warning{
+  color: red;
+}
+
+#findHikeBtn {
+    background-color: #8B4513;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#weather, #safety {
+    background: #fff; /* Adjust the background as needed */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+}
+#homeElements {
+  background-image: url("../static/trail_imgs/homeSlideShow/1.png"); /* Adjust the background as needed */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+/* Additional styles should be added to match the wireframe design */
+.popup {
+    display: none; /* Popup is hidden initially */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.75); /* Black w/ opacity */
+  }
+  
+  
+  .popup-content {
+    position: relative;
+    margin: auto;
+    margin-top: 10em;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px; /* Adjust based on your content */
+    text-align: center;
+    background: white;
+    border-radius: 5px;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-btn:hover,
+  .close-btn:focus {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    width: auto;
+  }
+  
+  #help img{
+    height: auto;
+    width: 1em;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 30px;
+    font-family: arial;
+  }
+
+  #help{
+    align-items: center;
+    flex-direction: row;
+    display: flex;
+  }
+
+  .difficultyColor{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: -1.8em;
+  }
+
+  .difficultyColor span{
+    font-size: 4rem;
+    margin-left: 10px;
+  }
+
+  header img{
+    border-radius: 10em;
+  }
+
+  header nav ul li a:hover{
+    text-decoration: underline;
+    color: white;
+    background-color: #000;
+    border-radius: 2em;
+    padding: 1em 0.5em 1em 0.5em;
+  }
+
+
+  @media (max-width: 550px){
+        #navmenu{
+          display: none;
+          position: fixed;
+          z-index: 100;
+          background: #696969;
+          height: 100vh;
+          width: 100vw;
+          top:0;
+        }
+      #navmenu ul{
+        display: flex;
+        flex-direction: column;
+      }
+      #navmenu ul li{
+        padding-bottom: 2em;
+      }
+        #navmenu ul li a{
+          color: white;
+          font-size: 2rem;
+        }
+        #hammenu{
+          display: inline;
+          width: 3em;
+          position: absolute;
+          top: 0;
+          right: 0;
+          margin-right: 0.5em;
+          margin-top: 0.5em;
+        }
+        #hammenu:hover{
+          cursor: pointer;
+        }
+        #closeMenu{
+          display: flex;
+          justify-content: flex-end;
+          padding-right: 1em;
+          padding-top: 1em;
+          margin-bottom: 3em;
+        }
+        #closeMenu img{
+          width: 3em;
+        }
+
+        #footer{
+          flex-direction: column;
+        }
+
+        .hikeTrailMap img{
+          width: 80vw;
+        }
+
+        #hammenu{
+          display: inline !important;
+        }
+  }
+  @media (min-width: 551px){
+        #hammenu{
+          display: none !important;
+        }
+        #closeMenu{
+          display: none;
+        }
+        header ul{
+          display: block;
+        }
+
+        .hike{
+          display: flex;
+        }
+        .hikeTrailMap{
+          margin-left: 2em;
+        }
+
+  }
+
+  @media (min-width: 1100px) {
+    .hike{      
+        align-items: center;
+          justify-content: space-between;
+          max-width: 50vw;
+       }
+        }
+      #hikes{
+        display: grid;
+        justify-items: center;
+      }
+
+  @media (max-width: 750px){
+    .hike{
+      flex-direction: column;
+      justify-content: center;
+      align-items: normal;
+    }
+    .hikeinfo h2{
+      max-width: 60vw;
+    }
+  }
+
+  #logo{
+    border-radius: 10em;
+  }
+
+  footer{
+    display: flex;
+    justify-content: center;
+    
+  }
+
+  #footer{
+    background-color: black;
+    width: 100%;
+    height: auto;
+    color: white;
+    padding: 3em 0 3em 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    position:static;
+    bottom: 0;
+    border-radius: 1em;
+    margin-top: 0.2em;
+    width: 98%;
+  }
+  #footer div{
+    margin: 0 1em 0 1em;
+  }
+
+  #footer a{
+    text-decoration: none; 
+    color: white;
+  }
+
+  #footer a:hover{
+    text-decoration: underline;
+  }
+
+  .loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid black; /* Blue */
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    animation: spin 1s linear infinite;
+  }
+
+  .loaderContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  #weather-report{
+    line-height: 2em;
+    background-color: white;
+    border-radius: 1em;
+    padding: 0 1em 0 1em;
+  }
+
+
+ h1{
+    border-bottom: 2px solid black; 
+    padding-bottom: 5px;
+    width: fit-content;
+    }
+
+  #ccIcon:hover{
+    cursor: pointer;
+  }
+
+  @media (min-width: 800px){
+    #homeSlide{
+        margin-left: 9vw;
+    }
+  }

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Tracks</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+    <script src="../static/session.js"></script>
+</head>
+<body>
+    <header>
+        <img src="../static/CTLogo.jpg" alt="Coyote Tracks Logo">
+        <img id="hammenu" src="../static/hammenu.png" alt="Navigation Menu" style="display: none;">
+        <nav id="navmenu">
+            <div id="closeMenu">
+            <img src="../static/close.png" alt="Close Navigation Menu">
+          </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/accessibility">Accessibility Info</a></li>
+                <li><a href="/timemanagement">Time Management</a></li>
+                <li><a href="/account">Account</a></li>
+                <li><a href="" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="heading">
+            <h1>Accessibility</h1>
+            <div id="warning">
+                <button style="color: black; border-radius: 1em; padding: 1em 1em 1em 1em;" onclick="showWeatherReport()">Detailed Weather Report</button>
+            </div>
+        </section>
+        <section id="intro">
+            <h2>Hello, <span id="logged-in-user"></span>!</h2>
+            <p>This is your starting point for adventure. Find your hike today!</p>
+            <label for="prefferedDifficulty">Difficulty<div class="tooltip"><span id="help">&nbsp<img src="../static/help.ico"></span></div>: </label>
+            <select id="prefferedDifficulty" name="options">
+                <option value="ALL">ALL</option>
+                <option value="Easy">Easy</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Hard">Hard</option>
+            </select>
+            <button id="findHikeBtn" onclick="showTrails()">Find My Hike</button>
+            <br>
+            <input type="checkbox" id="hideClosed" name="hideClosed" value="false">
+            <label for="hideClosed">Hide Closed Trails?</label><br>
+            <input type="checkbox" id="hidePet" name="hidePet" value="false">
+            <label for="hidePet">Hide Non-Pet Friendly?</label><br>
+            <input type="checkbox" id="hideNonWheelchair" name="hideNonWheelchair" value="false">
+            <label for="hideNonWheelchair">Hide Non-Wheelchair Friendly?</label><br>
+            <p id="feedback"></p>
+            <div id="hikes"></div>
+        </section>
+        <aside>
+            <div id="weather">
+                <h1>Weather</h1>
+                <div id="weather-report"></div>
+            </div>
+        </aside>
+        <div id="popup" class="popup">
+            <div class="popup-content">
+              <span class="close-btn" onclick="closePopup()">&times;</span>
+              <h2>Difficulty Details</h2>
+              <br><hr><br>
+              <p> Easy: Hikes with a distance up to <b>3 miles</b> and an elevation gain up to <b>200 feet</b>.
+                <br><br>
+                Moderate: Hikes with a distance up to <b>5 miles</b> and an elevation gain up to <b>500 feet</b>.
+                <br><br>
+                Hard: Hikes exceeding either the moderate distance or elevation gain thresholds.</p>
+            </div>
+          </div>
+        <div id="weatherPopup" class="popup">
+            <div class="popup-content">
+              <span class="close-btn" onclick="closeWeatherReport()">&times;</span>
+              <h2>Detailed Weather Report</h2>
+              <br><hr>
+              <p style="line-height: 3em; background: azure; font-family: monospace; font-size: x-large;" id="weatherPopupData"></b>
+            </div>
+          </div>
+          <div id="CCpopup" class="popup">
+            <div class="popup-content">
+              <span class="close-btn" onclick="closeCCPopup()">&times;</span>
+              <h1>Creative Commons</h1>
+              <h3>This Website Uses Creative Commons Principles</h3>
+              <h4>What is CC?</h4>
+              <p>&#x2022; Flexible Copyright Protection: CC licenses allow creators to specify the conditions under which others can use their work. This ranges from allowing any type of use as long as the creator is credited, to permitting only non-commercial uses, to allowing modifications as long as derivative works are shared under the same terms.
+            </p>
+            <p>&#x2022; Different Types of Licenses: Creative Commons offers several types of licenses, from the most permissive (CC BY) to the most restrictive (CC BY-NC-ND), allowing creators to choose the level of protection and freedom that fits their needs.
+            </p>
+            <p>&#x2022; Global Recognition: CC licenses are recognized worldwide, making them a powerful tool for sharing and using content across borders.
+            </p>
+            <a href="https://creativecommons.org/share-your-work/cclicenses/" target="_blank">Learn More Here</a></div>
+          </div> 
+    </main>
+    <footer>
+        <div id="footer"><div><span style="padding-right: 15px;">Coyote Trails</span><img id="ccIcon" style="max-width: 40px; vertical-align: middle; border-radius: 10em; background-color: white;" src="../static/cc.png"></div><div><a href="/about"><span>About</span></a></div></div>
+     </footer>
+    <script src="../static/script.js"></script>
+    <script src="../static/loaduserdata.js"></script>
+    <script>
+
+     
+     
+     
+document.addEventListener('DOMContentLoaded', function() {   
+const username = loggedInUser;
+
+// Construct the URL with the username as a query parameter
+const url = `/prefdiff?username=${encodeURIComponent(username)}`;
+
+function waitThenDo(milliseconds, callback) {
+    setTimeout(callback, milliseconds);
+}
+
+// Example usage:
+
+
+
+
+// Perform the GET request
+fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const preferredOption = data.PreferredDifficulty;
+        document.getElementById('prefferedDifficulty').value = preferredOption;
+        waitThenDo(100, () =>  showTrails());
+       
+        // Process the response data here
+    })
+    .catch(error => console.error('Error:', error));
+
+
+getWeatherReport("weather-report");
+loadingAsset("hikes");
+fetchHikesData();
+
+});
+    </script>
+   <script src="../static/popups.js"></script>
+   <script src="../static/hammenu.js"></script>
+</body>
+</html>

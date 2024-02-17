@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Tracks - Login</title>
+    <link rel="stylesheet" href="../static/login-styles.css">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+    <script src="../static/loggedOn.js"></script>
+</head>
+<body>
+    <header>
+        <img src="../static/CTLogo.jpg" alt="Coyote Tracks Logo" id="logo">
+    </header>
+    <main>
+        <section id="login-container">
+            <h2 style="text-align: center;">LOG IN</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="password" required>
+                </div>
+                <button type="submit">Log In</button>
+                <button type="button" id="create-account">MAKE NEW ACCOUNT</button>
+                <div id="form-alert" style="color: red; margin-top: 10px;"></div>
+            </form>
+        </section>
+    </main>
+    <script>
+    function loadingAsset(elementID){
+    const loadingDiv = document.getElementById(elementID)
+    loadingDiv.innerHTML = `<div class="loaderContainer"><div class="loader"></div></div>`;
+    }
+
+
+    document.getElementById('create-account').addEventListener('click', function() {
+        window.location.href = '/createaccount';
+      });
+
+      document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            loadingAsset("form-alert");
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;      
+            const formAlert = document.getElementById('form-alert'); 
+            // Prepare the data to be sent
+            const userData = {
+                username: username,
+                password: password
+            };
+        
+            // Send the data as JSON to the /createuser endpoint using Fetch API
+            fetch('/loginuser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(obj => {
+                if (obj.status >= 400) {
+                    // If server responded with an error status, display the error message
+                    throw new Error(obj.body.message || "An error occurred. Please try again.");
+                }
+                console.log('Success:', obj.body);
+                formAlert.textContent = obj.body.message;
+                formAlert.style.color = "green"; // Optionally change the color to indicate success
+                window.location.href = '/';
+                const daysValid = 7;
+                const expiryDate = new Date(Date.now() + daysValid * 24 * 60 * 60 * 1000).toUTCString();
+                document.cookie = `username=${encodeURIComponent(username)}; expires=${expiryDate}; path=/`;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                formAlert.textContent = error.message; // Display parsed error message
+            });
+        });
+
+
+      
+    </script>
+</body>
+</html>

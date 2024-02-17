@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Tracks</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <!-- <link rel="stylesheet" href="../static/login-styles.css"> -->
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+    <script src="../static/session.js"></script>
+    <style>
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+button[type="submit"] {
+    background-color: #8B4513;
+    color: white;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <img src="../static/CTLogo.jpg" alt="Coyote Tracks Logo">
+        <img id="hammenu" src="../static/hammenu.png" alt="Navigation Menu">
+        <nav id="navmenu">
+            <div id="closeMenu">
+            <img src="../static/close.png" alt="Close Navigation Menu">
+          </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/accessibility">Accessibility Info</a></li>
+                <li><a href="/timemanagement">Time Management</a></li>
+                <li><a href="/account">Account</a></li>
+                <li><a href="" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="intro">
+            <h2>Hello <span id="logged-in-user"></span></h2>
+            <h4 style="text-align: center; margin-top: 2em;">Account Management</h4>
+            <div>
+            <label for="prefferedDifficulty">Preffered Difficulty<div class="tooltip"><span id="help">&emsp;<img src="../static/help.ico"></span></div></label>
+            <select id="prefferedDifficulty" name="options">
+                <option value="Easy">Easy</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Hard">Hard</option>
+            </select>
+            <button onclick="changeDifficultyPreference()">Save</button>
+        </div>
+        <div>
+            <h4>Default Hike Duration Preference</h4>
+            <label for="numberInput">Enter a number: (Current: <span id="currectDurationPreference"></span>)</label>
+            <input type="number" id="numberInput" min="0" step="1" placeholder="60">
+            <button onclick="validateInputPref()">Submit</button>
+            <p style="color: red; font-weight: bold;" id="feedback"></p>
+        </div>
+        <div style="width: 75vw;">
+            <form id="change-pw-form">
+                <div class="form-group">
+                    <label for="password">PASSWORD</label>
+                    <input type="password" id="password" name="password" required placeholder="new password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">CONFIRM PASSWORD</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required placeholder="confirm new password">
+                </div>
+                <button type="submit">Change Password</button>
+                <div id="form-alert" style="color: red; margin-top: 10px;"></div>
+            </form>
+        </div>
+            <div id="popup" class="popup">
+                <div class="popup-content">
+                  <span class="close-btn" onclick="closePopup()">&times;</span>
+                  <h2>Difficulty Details</h2>
+                  <br><hr><br>
+                  <p> Easy: Hikes with a distance up to <b>3 miles</b> and an elevation gain up to <b>200 feet</b>.
+                    <br><br>
+                    Moderate: Hikes with a distance up to <b>5 miles</b> and an elevation gain up to <b>500 feet</b>.
+                    <br><br>
+                    Hard: Hikes exceeding either the moderate distance or elevation gain thresholds.</p>
+                </div>
+              </div>
+        </section>
+        <div id="CCpopup" class="popup">
+            <div class="popup-content">
+              <span class="close-btn" onclick="closeCCPopup()">&times;</span>
+              <h1>Creative Commons</h1>
+              <h3>This Website Uses Creative Commons Principles</h3>
+              <h4>What is CC?</h4>
+              <p>&#x2022; Flexible Copyright Protection: CC licenses allow creators to specify the conditions under which others can use their work. This ranges from allowing any type of use as long as the creator is credited, to permitting only non-commercial uses, to allowing modifications as long as derivative works are shared under the same terms.
+            </p>
+            <p>&#x2022; Different Types of Licenses: Creative Commons offers several types of licenses, from the most permissive (CC BY) to the most restrictive (CC BY-NC-ND), allowing creators to choose the level of protection and freedom that fits their needs.
+            </p>
+            <p>&#x2022; Global Recognition: CC licenses are recognized worldwide, making them a powerful tool for sharing and using content across borders.
+            </p>
+            <a href="https://creativecommons.org/share-your-work/cclicenses/" target="_blank">Learn More Here</a></div>
+          </div> 
+    </main>
+    <footer>
+        <div id="footer"><div><span style="padding-right: 15px;">Coyote Trails</span><img id="ccIcon" style="max-width: 40px; vertical-align: middle; border-radius: 10em; background-color: white;" src="../static/cc.png"></div><div><a href="/about"><span>About</span></a></div></div>
+     </footer>
+    <script src="../static/loaduserdata.js"></script>
+    <script src="../static/popups.js"></script>
+    <script>
+        const username = loggedInUser;
+
+        // Construct the URL with the username as a query parameter
+        const url = `/prefdiff?username=${encodeURIComponent(username)}`;
+        const durationPrefurl = `/prefduration?username=${encodeURIComponent(username)}`;
+
+        // Perform the GET request
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const preferredOption = data.PreferredDifficulty;
+                document.getElementById('prefferedDifficulty').value = preferredOption;
+            })
+            .catch(error => console.error('Error:', error));
+        fetch(durationPrefurl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const preferredOption = data.PreferredDuration;
+                document.getElementById('currectDurationPreference').innerText = preferredOption;
+            })
+            .catch(error => console.error('Error:', error));
+        
+
+         
+         document.getElementById('change-pw-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            const username = loggedInUser;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const formAlert = document.getElementById('form-alert');
+        
+            // Check if the passwords match
+            if(password !== confirmPassword) {
+                formAlert.textContent = "Passwords do not match. Please try again.";
+                return;
+            } else {
+                formAlert.textContent = ""; // Clear the message
+            }
+        
+            // Prepare the data to be sent
+            const userData = {
+                username: username,
+                password: password
+            };
+        
+            // Send the data as JSON to the /createuser endpoint using Fetch API
+            fetch('/changepw', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(obj => {
+                if (obj.status >= 400) {
+                    // If server responded with an error status, display the error message
+                    throw new Error(obj.body.message || "An error occurred. Please try again.");
+                }
+                console.log('Success:', obj.body);
+                formAlert.textContent = obj.body.message;
+                formAlert.style.color = "green"; // Optionally change the color to indicate success
+                // Redirect or update UI accordingly
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                formAlert.textContent = error.message; // Display parsed error message
+            });
+        });
+         
+        
+        function changeDifficultyPreference(){
+            const username = loggedInUser;
+            const newPreference = document.getElementById("prefferedDifficulty").value;
+            const formAlert = document.getElementById('form-alert');
+            const userData = {
+                username: username,
+                difficulty: newPreference
+            };
+        
+            // Send the data as JSON to the /createuser endpoint using Fetch API
+            fetch('/prefdiff', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(obj => {
+                if (obj.status >= 400) {
+                    // If server responded with an error status, display the error message
+                    throw new Error(obj.body.message || "An error occurred. Please try again.");
+                }
+                console.log('Success:', obj.body);
+                formAlert.textContent = obj.body.message;
+                formAlert.style.color = "green"; // Optionally change the color to indicate success
+                // Redirect or update UI accordingly
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                formAlert.textContent = error.message; // Display parsed error message
+            });
+    };
+        function changeDurationPreference(NewValue){
+            const username = loggedInUser;
+            const newPreference = NewValue;
+            const formAlert = document.getElementById('form-alert');
+            const userData = {
+                username: username,
+                duration: newPreference
+            };
+        
+            // Send the data as JSON to the /createuser endpoint using Fetch API
+            fetch('/prefduration', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(obj => {
+                if (obj.status >= 400) {
+                    // If server responded with an error status, display the error message
+                    throw new Error(obj.body.message || "An error occurred. Please try again.");
+                }
+                console.log('Success:', obj.body);
+                formAlert.textContent = obj.body.message;
+                formAlert.style.color = "green"; // Optionally change the color to indicate success
+                // Redirect or update UI accordingly
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                formAlert.textContent = error.message; // Display parsed error message
+            });
+    };
+
+
+
+            function validateInputPref() {
+            const inputElement = document.getElementById('numberInput');
+            const value = inputElement.value;
+            const feedbackElement = document.getElementById('feedback');
+
+            // Check if the value is an integer and non-negative
+            if (!Number.isInteger(parseFloat(value)) || parseFloat(value) < 0 || value.includes('.')) {
+                feedbackElement.textContent = 'Please enter a non-negative integer.';
+            } else {
+                console.log(value);
+                console.log("nice");
+                changeDurationPreference(value);
+                    
+            };
+            }
+    </script>
+      <script src="../static/popups.js"></script>
+    <script src="../static/hammenu.js"></script>
+    <script src="../static/script.js"></script>
+</body>
+</html>

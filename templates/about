@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Tracks - About</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+    <script src="../static/session.js"></script>
+</head>
+<body>
+    <header>
+        <img src="../static/CTLogo.jpg" alt="Coyote Tracks Logo">
+        <img id="hammenu" src="../static/hammenu.png" alt="Navigation Menu">
+        <nav id="navmenu">
+            <div id="closeMenu">
+            <img src="../static/close.png" alt="Close Navigation Menu">
+          </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/accessibility">Accessibility Info</a></li>
+                <li><a href="/timemanagement">Time Management</a></li>
+                <li><a href="/account">Account</a></li>
+                <li><a href="" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="heading">
+            <h1>About</h1>
+        </section>
+        <section id="about">
+            <h4>Empowering Arizona's Hiking Enthusiasts</h4>
+
+            <p>Coyote Tracks is a transformative platform designed to connect hikers with the vast natural beauty of Arizona's landscapes. Developed by a passionate team led by Holden Pijloo, Jack Sheridan and Malak Rabuck - Coyote Tracks was conceived with the vision to facilitate personalized hiking experiences.</p>
+                
+             <h4>Our Mission</h4>
+              <p>We understand the challenges faced by Arizona's outdoor enthusiasts—finding safe, reliable trails tailored to individual preferences and experience levels. Coyote Tracks rises to meet this need with a user-friendly application that empowers users to discover trails that resonate with their aspirations and constraints, such as difficulty levels, available time, and prior hiking experience.</p>
+                
+              <h4>What We Offer</h4>
+                <p>&#10004; Personalized Trail Discovery: Through our intuitive interface, users can effortlessly search for trails that match their criteria, ensuring every adventure is a perfect fit.</p>
+            <p>&#10004; Optimized Hiking Preparation: By providing crucial trail information and insights derived from data analytics, we equip hikers for success and safety in their endeavors.</p>
+        <p>&#10004; Community and Government Engagement: We work closely with local and state governments, leveraging a comprehensive database to enhance tourism and promote the stewardship of public lands.</p>
+                
+    <h4>Join the Journey</h4>
+<p>   We invite you to be part of Coyote Tracks—where your next adventure awaits. Together, let's explore the trails less traveled and experience the grandeur of Arizona's wilderness.</p>
+        </section>
+    </main>
+    <footer>
+        <div id="footer"><div><span style="padding-right: 15px;">Coyote Trails</span><img style="max-width: 40px; vertical-align: middle; border-radius: 10em; background-color: white;" src="../static/cc.png"></div><div><a href="/about"><span>About</span></a></div></div>
+     </footer>
+    <script src="../static/script.js"></script>
+    <script src="../static/hammenu.js"></script>
+    <script>
+    const username = usernameCookie;
+    const durationPrefurl = `/prefduration?username=${encodeURIComponent(username)}`;
+        fetch(durationPrefurl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const preferredOption = data.PreferredDuration;
+                document.getElementById('numberInput').value = preferredOption;
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+    <style>
+    #about h4{
+    border-bottom: 2px solid black; 
+    padding-bottom: 5px;
+    width: fit-content;
+    }</style>
+</body>
+</html>

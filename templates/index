@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Tracks</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+    <script src="../static/session.js"></script>
+    <script async src="../static/loaduserdata.js"></script>
+</head>
+<body>
+    <header>
+        <img src="../static/CTLogo.jpg" alt="Coyote Tracks Logo">
+        <img id="hammenu" src="../static/hammenu.png" alt="Navigation Menu">
+        <nav id="navmenu">
+            <div id="closeMenu">
+            <img src="../static/close.png" alt="Close Navigation Menu">
+          </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/accessibility">Accessibility Info</a></li>
+                <li><a href="/timemanagement">Time Management</a></li>
+                <li><a href="/account">Account</a></li>
+                <li><a href="" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="intro">
+            <h1 style="text-align: center;">Hello, <span id="logged-in-user"></span>!</h1>
+            <p>This is your starting point for adventure. Find your hike today!</p>
+        </section>
+        <aside id="homeSlide">
+            <div id="carousel" class="carousel">
+            <div id="homeElements" class="carousel-background">
+                <div style="display: flex; justify-content: center;"><h1 style="background: white; padding: 1em 2em 1em 2em;border-radius: 1em;">Weather</h1></div>
+                <div class="container" style="display: flex; justify-content: center;">
+                    <div id="weather-report"></div>
+                </div>
+            </div>
+        </div>
+        </aside>
+        <div id="CCpopup" class="popup">
+            <div class="popup-content">
+              <span class="close-btn" onclick="closeCCPopup()">&times;</span>
+              <h1>Creative Commons</h1>
+              <h3>This Website Uses Creative Commons Principles</h3>
+              <h4>What is CC?</h4>
+              <p>&#x2022; Flexible Copyright Protection: CC licenses allow creators to specify the conditions under which others can use their work. This ranges from allowing any type of use as long as the creator is credited, to permitting only non-commercial uses, to allowing modifications as long as derivative works are shared under the same terms.
+            </p>
+            <p>&#x2022; Different Types of Licenses: Creative Commons offers several types of licenses, from the most permissive (CC BY) to the most restrictive (CC BY-NC-ND), allowing creators to choose the level of protection and freedom that fits their needs.
+            </p>
+            <p>&#x2022; Global Recognition: CC licenses are recognized worldwide, making them a powerful tool for sharing and using content across borders.
+            </p>
+            <a href="https://creativecommons.org/share-your-work/cclicenses/" target="_blank">Learn More Here</a></div>
+          </div> 
+    </main>
+    <footer>
+       <div id="footer"><div><span style="padding-right: 15px;">Coyote Trails</span><img id="ccIcon" style="max-width: 40px; vertical-align: middle; border-radius: 10em; background-color: white;" src="../static/cc.png"></div><div><a href="/about"><span>About</span></a></div></div>
+    </footer>
+    <style>
+.carousel {
+  position: relative;
+  max-width: 80vw;
+ border-radius: 2em;
+}
+
+.carousel-background {
+  width: 100%;
+  height: 100%;
+  background-size: cover; /* Cover the entire div */
+  background-position: center; /* Center the background image */
+}
+
+
+
+    </style>
+    <script src="../static/script.js"></script>
+    <script src="../static/hammenu.js"></script>
+ 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        getWeatherReport("weather-report");
+        });
+
+        let index = 0; // Current slide index
+const images = ["../static/trail_imgs/homeSlideShow/1.png", "../static/trail_imgs/homeSlideShow/2.png","../static/trail_imgs/homeSlideShow/3.png","../static/trail_imgs/homeSlideShow/4.png","../static/trail_imgs/homeSlideShow/5.png","../static/trail_imgs/homeSlideShow/6.png"]; // Array of image URLs
+
+function showSlide(n) {
+  const carouselBackground = document.querySelector('.carousel-background');
+  if (n >= images.length) { index = 0; }
+  if (n < 0) { index = images.length - 1; }
+  carouselBackground.style.backgroundImage = `url('${images[index]}')`;
+}
+
+function moveSlide(n) {
+  showSlide(index += n);
+}
+
+showSlide(index); // Initialize the carousel by showing the first slide
+
+// Set interval for automatic slide change
+setInterval(function() {
+  moveSlide(1); // Change to the next slide
+}, 5000); // Change image every 10 seconds
+
+
+
+    </script>
+</body>
+</html>

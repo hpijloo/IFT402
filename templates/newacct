@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coyote Tracks - Create Account</title>
+    <link rel="stylesheet" href="../static/login-styles.css">
+    <link rel="icon" type="image/x-icon" href="../static/favicon.ico">
+</head>
+<body>
+    <header>
+        <img src="../static/CTLogo.jpg" alt="Coyote Tracks Logo" id="logo">
+    </header>
+    <main>
+        <section id="login-container">
+            <h2 style="text-align: center;">Create Account</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required placeholder="confirm password">
+                </div>
+                <button type="submit">Create Account</button>
+                <div id="form-alert" style="color: red; margin-top: 10px;"></div>
+            </form>
+        </section>
+    </main>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const formAlert = document.getElementById('form-alert');
+        
+            // Check if the passwords match
+            if(password !== confirmPassword) {
+                formAlert.textContent = "Passwords do not match. Please try again.";
+                return;
+            } else {
+                formAlert.textContent = ""; // Clear the message
+            }
+        
+            // Prepare the data to be sent
+            const userData = {
+                username: username,
+                password: password
+            };
+        
+            // Send the data as JSON to the /createuser endpoint using Fetch API
+            fetch('/createuser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(obj => {
+                if (obj.status >= 400) {
+                    // If server responded with an error status, display the error message
+                    throw new Error(obj.body.message || "An error occurred. Please try again.");
+                }
+                console.log('Success:', obj.body);
+                formAlert.innerHTML = `<p>Account created successfully. <a href="/login">Please log in.</a></p>`;
+                formAlert.style.color = "green"; // Optionally change the color to indicate success
+                // Redirect or update UI accordingly
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                formAlert.textContent = error.message; // Display parsed error message
+            });
+        });
+        </script>
+</body>
+</html>
